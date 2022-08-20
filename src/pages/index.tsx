@@ -2,14 +2,12 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { trpc } from "../utils/trpc";
 
-type TechnologyCardProps = {
-  name: string;
-  description: string;
-  documentation: string;
-};
-
 const Home: NextPage = () => {
-  const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
+  const { data, isLoading, error } = trpc.useQuery(["pokemon.get-one"], {
+    refetchInterval: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <>
@@ -20,58 +18,49 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
-        <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">
-          Create <span className="text-purple-300">T3</span> App
+        <h1 className="text-5xl leading-normal font-extrabold text-gray-700">
+          Random <span className="text-purple-300">Pokemon</span> App
         </h1>
-        <p className="text-2xl text-gray-700">This stack uses:</p>
-        <div className="grid gap-3 pt-3 mt-3 text-center md:grid-cols-2 lg:w-2/3">
-          <TechnologyCard
-            name="NextJS"
-            description="The React framework for production"
-            documentation="https://nextjs.org/"
-          />
-          <TechnologyCard
-            name="TypeScript"
-            description="Strongly typed programming language that builds on JavaScript, giving you better tooling at any scale"
-            documentation="https://www.typescriptlang.org/"
-          />
-          <TechnologyCard
-            name="TailwindCSS"
-            description="Rapidly build modern websites without ever leaving your HTML"
-            documentation="https://tailwindcss.com/"
-          />
-          <TechnologyCard
-            name="tRPC"
-            description="End-to-end typesafe APIs made easy"
-            documentation="https://trpc.io/"
-          />
-        </div>
-        <div className="pt-6 text-2xl text-blue-500 flex justify-center items-center w-full">
-          {hello.data ? <p>{hello.data.greeting}</p> : <p>Loading..</p>}
-        </div>
+
+        {isLoading && <p>Loading...</p>}
+        {error && <p>{error.message}</p>}
+        {data && (
+          <div className="flex flex-col rounded-md p-10 bg-gray-50 shadow-md mt-10 max-w-xs w-full">
+            <img
+              className="w-40 h-40 mx-auto"
+              src={data.sprite}
+              alt={`${data.name} stats`}
+            />
+            <div>
+              <h1 className="text-3xl font-bold text-zinc-900 capitalize text-center">
+                {data.name}
+              </h1>
+              <div className="text-center space-x-2 mt-4 text-sm font-semibold">
+                {data.types.map((type) => (
+                  <span
+                    key={type}
+                    className="bg-green-100 text-green-500 rounded-2xl px-4 py-1"
+                  >
+                    {type}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-4">
+                <h2 className="text-xl font-medium">Stats</h2>
+                <div className="mt-4">
+                  {data.stats.map((stat) => (
+                    <div key={stat.name} className="flex justify-between">
+                      <p className="font-semibold capitalize">{stat.name}: </p>
+                      <p>{stat.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </>
-  );
-};
-
-const TechnologyCard = ({
-  name,
-  description,
-  documentation,
-}: TechnologyCardProps) => {
-  return (
-    <section className="flex flex-col justify-center p-6 duration-500 border-2 border-gray-500 rounded shadow-xl motion-safe:hover:scale-105">
-      <h2 className="text-lg text-gray-700">{name}</h2>
-      <p className="text-sm text-gray-600">{description}</p>
-      <a
-        className="mt-3 text-sm underline text-violet-500 decoration-dotted underline-offset-2"
-        href={documentation}
-        target="_blank"
-        rel="noreferrer"
-      >
-        Documentation
-      </a>
-    </section>
   );
 };
 
