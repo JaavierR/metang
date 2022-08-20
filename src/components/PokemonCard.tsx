@@ -1,4 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import { RandomPokemon } from "../server/router/pokemon";
+import Badge from "./Badge";
 
 function PokemonCard({ pokemon }: { pokemon: RandomPokemon }) {
   return (
@@ -14,12 +16,7 @@ function PokemonCard({ pokemon }: { pokemon: RandomPokemon }) {
         </h1>
         <div className="text-center space-x-2 mt-4 text-sm font-semibold">
           {pokemon.types.map((type) => (
-            <span
-              key={type}
-              className="bg-green-100 text-green-500 rounded-2xl px-4 py-1 capitalize"
-            >
-              {type}
-            </span>
+            <Badge key={type}>{type}</Badge>
           ))}
         </div>
         <div className="mt-4">
