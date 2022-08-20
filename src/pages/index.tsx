@@ -3,11 +3,19 @@ import Head from "next/head";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
-  const { data, isLoading, error } = trpc.useQuery(["pokemon.get-one"], {
-    refetchInterval: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-  });
+  const { data, isLoading, error, refetch } = trpc.useQuery(
+    ["pokemon.get-one"],
+    {
+      refetchInterval: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  function newPokemon(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    refetch();
+  }
 
   return (
     <>
@@ -21,6 +29,14 @@ const Home: NextPage = () => {
         <h1 className="text-5xl leading-normal font-extrabold text-gray-700">
           Random <span className="text-purple-300">Pokemon</span> App
         </h1>
+
+        <button
+          type="button"
+          onClick={newPokemon}
+          className="bg-purple-500 hover:bg-purple-600 px-4 py-1 rounded mt-6 text-white text-xs font-semibold uppercase"
+        >
+          Fetch new
+        </button>
 
         {isLoading && <p>Loading...</p>}
         {error && <p>{error.message}</p>}
