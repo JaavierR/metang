@@ -3,24 +3,28 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { getRandomPokemon } from "../../utils/getRandomPokemon";
 
+const randomPokemonSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  types: z.string().array(),
+  sprite: z.string(),
+  stats: z
+    .object({
+      name: z.string(),
+      value: z.number(),
+    })
+    .array(),
+});
+
+export type RandomPokemon = z.infer<typeof randomPokemonSchema>;
+
 export const pokemonRouter = createRouter().query("get-one", {
   input: z
     .object({
       id: z.number().min(1).max(898),
     })
     .nullish(),
-  output: z.object({
-    id: z.number(),
-    name: z.string(),
-    types: z.string().array(),
-    sprite: z.string(),
-    stats: z
-      .object({
-        name: z.string(),
-        value: z.number(),
-      })
-      .array(),
-  }),
+  output: randomPokemonSchema,
   async resolve({ input }) {
     const id = input ? input.id : getRandomPokemon();
 
