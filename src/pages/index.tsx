@@ -3,14 +3,16 @@ import Head from "next/head";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
-  const { data, isLoading, error, refetch } = trpc.useQuery(
-    ["pokemon.get-one"],
-    {
-      refetchInterval: false,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
-    }
-  );
+  const {
+    data: pokemon,
+    isLoading,
+    error,
+    refetch,
+  } = trpc.useQuery(["pokemon.get-one"], {
+    refetchInterval: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });
 
   function newPokemon(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -40,19 +42,19 @@ const Home: NextPage = () => {
 
         {isLoading && <p>Loading...</p>}
         {error && <p>{error.message}</p>}
-        {data && (
+        {pokemon && (
           <div className="flex flex-col rounded-md p-10 bg-gray-50 shadow-md mt-10 max-w-xs w-full">
             <img
               className="w-40 h-40 mx-auto"
-              src={data.sprite}
-              alt={`${data.name} stats`}
+              src={pokemon.sprite}
+              alt={`${pokemon.name} stats`}
             />
             <div>
               <h1 className="text-3xl font-bold text-zinc-900 capitalize text-center">
-                {data.name}
+                {pokemon.name}
               </h1>
               <div className="text-center space-x-2 mt-4 text-sm font-semibold">
-                {data.types.map((type) => (
+                {pokemon.types.map((type) => (
                   <span
                     key={type}
                     className="bg-green-100 text-green-500 rounded-2xl px-4 py-1"
@@ -64,7 +66,7 @@ const Home: NextPage = () => {
               <div className="mt-4">
                 <h2 className="text-xl font-medium">Stats</h2>
                 <div className="mt-4">
-                  {data.stats.map((stat) => (
+                  {pokemon.stats.map((stat) => (
                     <div key={stat.name} className="flex justify-between">
                       <p className="font-semibold capitalize">{stat.name}: </p>
                       <p>{stat.value}</p>
