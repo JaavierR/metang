@@ -1,11 +1,14 @@
 import { createRouter } from "./context";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { getRandomPokemon } from "../../utils/getRandomPokemon";
 
 export const pokemonRouter = createRouter().query("get-one", {
-  input: z.object({
-    id: z.number().min(1).max(898),
-  }),
+  input: z
+    .object({
+      id: z.number().min(1).max(898),
+    })
+    .nullish(),
   output: z.object({
     id: z.number(),
     name: z.string(),
@@ -19,7 +22,7 @@ export const pokemonRouter = createRouter().query("get-one", {
       .array(),
   }),
   async resolve({ input }) {
-    const { id } = input;
+    const id = input ? input.id : getRandomPokemon();
 
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
 
