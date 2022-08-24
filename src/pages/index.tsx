@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import React, { Fragment } from "react";
 import PokemonCard from "../components/PokemonCard";
 import { trpc } from "../utils/trpc";
 
@@ -13,6 +14,10 @@ const Home: NextPage = () => {
     refetchInterval: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
+  });
+
+  const testQuery = trpc.useInfiniteQuery(["pokemon.get-infinite", {}], {
+    getNextPageParam: (lastPage) => lastPage.nextOffset,
   });
 
   function newPokemon(e: React.MouseEvent<HTMLButtonElement>) {
@@ -33,17 +38,47 @@ const Home: NextPage = () => {
           Random <span className="text-purple-300">Pokemon</span> App
         </h1>
 
-        <button
-          type="button"
-          onClick={newPokemon}
-          className="bg-purple-500 hover:bg-purple-600 px-4 py-1 rounded mt-6 text-white text-xs font-semibold uppercase"
-        >
-          Fetch new
-        </button>
+        <div className="grid grid-cols-2 gap-20 max-w-xl w-full">
+          <div className="text-center w-full">
+            <button
+              type="button"
+              onClick={newPokemon}
+              className="bg-purple-500 hover:bg-purple-600 px-4 py-1 rounded mt-6 text-white text-xs font-semibold uppercase"
+            >
+              Fetch new
+            </button>
 
-        {isLoading && <p>Loading...</p>}
-        {error && <p>{error.message}</p>}
-        {pokemon && <PokemonCard pokemon={pokemon} />}
+            {isLoading && <p>Loading...</p>}
+            {error && <p>{error.message}</p>}
+            {pokemon && <PokemonCard pokemon={pokemon} />}
+          </div>
+
+          <div>
+            <button
+              type="button"
+              onClick={() => testQuery.fetchNextPage()}
+              className="bg-pink-500 text-white px-4 py-1 rounded mt-6 text-sm uppercase font-semibold"
+            >
+              Fetch More
+            </button>
+            <div className="mt-10">
+              {testQuery.data?.pages.map((page, index) => {
+                return (
+                  <Fragment key={index}>
+                    {page.results.map((pokemon: { name: string }) => (
+                      <p
+                        key={pokemon.name}
+                        className="capitalize text-gray-700 font-semibold"
+                      >
+                        {pokemon.name}
+                      </p>
+                    ))}
+                  </Fragment>
+                );
+              })}
+            </div>
+          </div>
+        </div>
       </main>
     </>
   );
