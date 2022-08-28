@@ -4,9 +4,16 @@ import type { AppRouter } from "../server/router";
 import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import "../styles/globals.css";
+import { useState } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
-  return <Component {...pageProps} />;
+  const [queryClient] = useState(() => new QueryClient());
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Component {...pageProps} />;
+    </QueryClientProvider>
+  );
 };
 
 const getBaseUrl = () => {

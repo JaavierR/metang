@@ -1,10 +1,13 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import PokemonCard from "../components/PokemonCard";
+import { useInView } from "react-intersection-observer";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
+  const { ref, inView } = useInView();
+
   const {
     data: pokemon,
     isLoading,
@@ -16,9 +19,18 @@ const Home: NextPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  const testQuery = trpc.useInfiniteQuery(["pokemon.get-infinite", {}], {
-    getNextPageParam: (lastPage) => lastPage.nextOffset,
-  });
+  const { data: pokemons, fetchNextPage } = trpc.useInfiniteQuery(
+    ["pokemon.get-infinite", {}],
+    {
+      getNextPageParam: (lastPage) => lastPage.nextOffset,
+    }
+  );
+
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   function newPokemon(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -56,13 +68,13 @@ const Home: NextPage = () => {
           <div>
             <button
               type="button"
-              onClick={() => testQuery.fetchNextPage()}
+              onClick={() => fetchNextPage()}
               className="bg-pink-500 text-white px-4 py-1 rounded mt-6 text-sm uppercase font-semibold"
             >
               Fetch More
             </button>
             <div className="mt-10">
-              {testQuery.data?.pages.map((page, index) => {
+              {pokemons?.pages.map((page, index) => {
                 return (
                   <Fragment key={index}>
                     {page.results.map((pokemon: { name: string }) => (
@@ -77,6 +89,7 @@ const Home: NextPage = () => {
                 );
               })}
             </div>
+            <div ref={ref}></div>
           </div>
         </div>
       </main>
