@@ -4,14 +4,14 @@ import Badge from "./Badge";
 
 function PokemonCard({ pokemon }: { pokemon: RandomPokemon }) {
   return (
-    <div className="flex flex-col rounded-md p-10 bg-gray-50 shadow-md mt-10 max-w-xs w-full">
+    <div className="flex flex-col  rounded-md p-10 bg-gray-50 dark:highlight-white/10 dark:bg-slate-800/90 dark:text-slate-300 shadow-md mt-10 max-w-xs w-full">
       <img
         className="w-40 h-40 mx-auto"
         src={pokemon.sprite}
         alt={`${pokemon.name} stats`}
       />
       <div>
-        <h1 className="text-3xl font-bold text-zinc-900 capitalize text-center">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white capitalize text-center">
           {pokemon.name}
         </h1>
         <div className="text-center space-x-2 mt-4 text-sm font-semibold">
