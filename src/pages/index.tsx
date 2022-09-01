@@ -4,6 +4,7 @@ import React, { Fragment, useEffect } from "react";
 import PokemonCard from "../components/PokemonCard";
 import { useInView } from "react-intersection-observer";
 import { trpc } from "../utils/trpc";
+import { Header } from "../components/Header";
 
 const Home: NextPage = () => {
   const { ref, inView } = useInView();
@@ -45,9 +46,11 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Header />
+
       <main className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
-        <h1 className="text-5xl leading-normal font-extrabold text-gray-700">
-          Random <span className="text-purple-300">Pokemon</span> App
+        <h1 className="text-5xl leading-normal font-extrabold text-slate-700 dark:text-white">
+          Random <span className="text-rose-300">Pokemon</span> App
         </h1>
 
         <div className="grid grid-cols-2 gap-20 max-w-xl w-full">
@@ -55,7 +58,7 @@ const Home: NextPage = () => {
             <button
               type="button"
               onClick={newPokemon}
-              className="bg-purple-500 hover:bg-purple-600 px-4 py-1 rounded mt-6 text-white text-xs font-semibold uppercase"
+              className="bg-rose-500 hover:bg-rose-600 px-4 py-1 rounded mt-6 text-white text-xs font-semibold uppercase"
             >
               Fetch new
             </button>
