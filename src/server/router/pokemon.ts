@@ -63,24 +63,27 @@ export const pokemonRouter = createRouter()
     }),
     async resolve({ input }) {
       const limit = input.limit ?? 10;
-      const cursor = input.cursor ?? 0;
+      const cursor = input.cursor ?? 1;
 
-      const res = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${cursor}`
-      );
+      const promises = [];
 
-      if (!res.ok) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Pokemons not found",
-        });
+      for (let index = cursor; index <= cursor + limit; index++) {
+        const url = `https://pokeapi.co/api/v2/pokemon/${index}`;
+        promises.push(fetch(url).then((res) => res.json()));
       }
 
-      // TODO: parse response to add images
-      const { results } = await res.json();
+      const results = await Promise.all(promises);
+      const pokemons = results.map((pokemon) => ({
+        name: pokemon.name,
+        id: pokemon.id,
+        types: pokemon.types.map(
+          (type: { type: { name: string } }) => type.type.name
+        ),
+        sprite: pokemon.sprites["front_default"],
+      }));
 
       return {
-        results,
+        results: pokemons,
         nextOffset: cursor + limit,
       };
     },
