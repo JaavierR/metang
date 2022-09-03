@@ -18,6 +18,7 @@ const Home: NextPage = () => {
     refetchInterval: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
+    enabled: false,
   });
 
   const { data: pokemons, fetchNextPage } = trpc.useInfiniteQuery(
@@ -49,10 +50,6 @@ const Home: NextPage = () => {
       <Header />
 
       <main className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
-        <h1 className="text-5xl leading-normal font-extrabold text-slate-700 dark:text-white">
-          Random <span className="text-rose-300">Pokemon</span> App
-        </h1>
-
         <div className="grid grid-cols-2 gap-20 max-w-xl w-full">
           <div className="text-center w-full">
             <button

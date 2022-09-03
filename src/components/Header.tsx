@@ -32,10 +32,9 @@ export function Header() {
         <Link href="/">
           <a className="block w-10 overflow-hidden lg:w-auto">
             <span className="sr-only">Home page</span>
-            {/* <Logo /> */}
-            <span className="dark:text-white text-slate-900 font-semibold text-2xl tracking-tight">
-              Pokedex
-            </span>
+            <h1 className="text-2xl leading-normal tracking-tight font-extrabold text-slate-700 dark:text-white">
+              Random <span className="text-rose-300">Pokemon</span> App
+            </h1>
           </a>
         </Link>
       </div>
