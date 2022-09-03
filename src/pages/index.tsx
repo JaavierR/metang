@@ -51,40 +51,24 @@ const Home: NextPage = () => {
 
       <main className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
         <div className="grid grid-cols-2 gap-20 max-w-xl w-full">
-          <div className="text-center w-full">
-            <button
-              type="button"
-              onClick={newPokemon}
-              className="bg-rose-500 hover:bg-rose-600 px-4 py-1 rounded mt-6 text-white text-xs font-semibold uppercase"
-            >
-              Fetch new
-            </button>
-
-            {isLoading && <p>Loading...</p>}
-            {error && <p>{error.message}</p>}
-            {pokemon && <PokemonCard pokemon={pokemon} />}
-          </div>
-
           <div>
-            <button
-              type="button"
-              onClick={() => fetchNextPage()}
-              className="bg-pink-500 text-white px-4 py-1 rounded mt-6 text-sm uppercase font-semibold"
-            >
-              Fetch More
-            </button>
             <div className="mt-10">
               {pokemons?.pages.map((page, index) => {
                 return (
                   <Fragment key={index}>
-                    {page.results.map((pokemon: { name: string }) => (
-                      <p
-                        key={pokemon.name}
-                        className="capitalize text-gray-700 font-semibold"
-                      >
-                        {pokemon.name}
-                      </p>
-                    ))}
+                    {page.results.map(
+                      (pokemon: { name: string; sprite: string }) => (
+                        <>
+                          <img src={pokemon.sprite} alt="image" />
+                          <p
+                            key={pokemon.name}
+                            className="capitalize text-gray-700 font-semibold"
+                          >
+                            {pokemon.name}
+                          </p>
+                        </>
+                      )
+                    )}
                   </Fragment>
                 );
               })}
