@@ -1,25 +1,12 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import React, { Fragment, useEffect } from "react";
-import PokemonCard from "../components/PokemonCard";
+import { Fragment, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { trpc } from "../utils/trpc";
 import { Header } from "../components/Header";
 
 const Home: NextPage = () => {
   const { ref, inView } = useInView();
-
-  const {
-    data: pokemon,
-    isLoading,
-    error,
-    refetch,
-  } = trpc.useQuery(["pokemon.get-one"], {
-    refetchInterval: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    enabled: false,
-  });
 
   const { data: pokemons, fetchNextPage } = trpc.useInfiniteQuery(
     ["pokemon.get-infinite", {}],
@@ -33,11 +20,6 @@ const Home: NextPage = () => {
       fetchNextPage();
     }
   }, [inView]);
-
-  function newPokemon(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-    refetch();
-  }
 
   return (
     <>
@@ -58,15 +40,7 @@ const Home: NextPage = () => {
                   <Fragment key={index}>
                     {page.results.map(
                       (pokemon: { name: string; sprite: string }) => (
-                        <>
-                          <img src={pokemon.sprite} alt="image" />
-                          <p
-                            key={pokemon.name}
-                            className="capitalize text-gray-700 font-semibold"
-                          >
-                            {pokemon.name}
-                          </p>
-                        </>
+                        <div>{pokemon.name}</div>
                       )
                     )}
                   </Fragment>
