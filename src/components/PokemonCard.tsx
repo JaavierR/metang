@@ -123,7 +123,7 @@ export function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
         )}
 
         <button
-          className="mt-4 uppercase font-semibold text-xs text-stone-700 flex items-center animate-pulse"
+          className="mt-4 uppercase font-semibold text-xs text-stone-500 flex items-center hover:text-stone-900"
           type="button"
           onClick={() => setIsOpen(!isOpen)}
         >

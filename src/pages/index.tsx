@@ -32,7 +32,7 @@ const Home: NextPage = () => {
 
       <Header />
 
-      <main className="max-w-8xl mx-auto flex flex-col flex-1 items-center min-h-[calc(100vh)-4.5rem] pt-4">
+      <main className="max-w-8xl mx-auto flex flex-col flex-1 items-center min-h-[calc(100vh)-4.5rem] pt-4 px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-4 gap-10 w-full">
           <div className="md:col-span-2 lg:col-span-1 md:sticky md:top-[5.5rem] md:h-[calc(100vh-4.5rem)]">
             Random pokemon
