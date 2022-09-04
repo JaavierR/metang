@@ -35,8 +35,8 @@ const PokemonSchema = z.object({
       value: z.number(),
     })
     .array(),
-  abilities: z.string().array().nullish(),
-  genus: z.string().nullish(),
+  abilities: z.string().array(),
+  genus: z.string(),
 });
 
 export type Pokemon = z.infer<typeof PokemonSchema>;
@@ -52,16 +52,21 @@ export const pokemonRouter = createRouter()
     async resolve({ input }) {
       const id = input ? input.id : getRandomPokemon();
 
-      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+      const pokemonRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+      const specieRes = await fetch(
+        `https://pokeapi.co/api/v2/pokemon-species/${id}`
+      );
 
-      if (!res.ok) {
+      if (!pokemonRes.ok || !specieRes.ok) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Pokemon not found",
         });
       }
 
-      const { name, types, stats, sprites } = await res.json();
+      const { name, types, stats, sprites, abilities } =
+        await pokemonRes.json();
+      const specie = await specieRes.json();
 
       const pokemon: Pokemon = {
         id,
@@ -74,6 +79,12 @@ export const pokemonRouter = createRouter()
             value: stat.base_stat,
           })
         ),
+        abilities: abilities.map(
+          (ability: { ability: { name: string } }) => ability.ability.name
+        ),
+        genus: specie.genera.find(
+          (gen: { language: { name: string } }) => gen.language.name === "en"
+        ).genus,
       };
 
       return pokemon;
