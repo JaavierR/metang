@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import { RandomPokemon } from "../server/router/pokemon";
+import { Pokemon } from "../server/router/pokemon";
 import Badge from "./Badge";
 
-function PokemonCard({ pokemon }: { pokemon: RandomPokemon }) {
+function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
   return (
     <div className="flex flex-col  rounded-md p-10 bg-gray-50 dark:highlight-white/10 dark:bg-slate-800/90 dark:text-slate-300 shadow-md mt-10 max-w-xs w-full">
       <img
