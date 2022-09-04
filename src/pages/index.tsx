@@ -13,6 +13,8 @@ const Home: NextPage = () => {
     ["pokemon.get-infinite", {}],
     {
       getNextPageParam: (lastPage) => lastPage.nextOffset,
+      refetchOnWindowFocus: false,
+      refetchInterval: false,
     }
   );
 
@@ -20,7 +22,7 @@ const Home: NextPage = () => {
     if (inView) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, fetchNextPage]);
 
   return (
     <>
