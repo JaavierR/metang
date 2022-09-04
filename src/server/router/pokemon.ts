@@ -68,7 +68,7 @@ export const pokemonRouter = createRouter()
       const promises1 = [];
       const promises2 = [];
 
-      for (let index = cursor; index <= cursor + limit; index++) {
+      for (let index = cursor; index < cursor + limit; index++) {
         const pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${index}`;
         const speciesUrl = `https://pokeapi.co/api/v2/pokemon-species/${index}`;
 
@@ -78,7 +78,6 @@ export const pokemonRouter = createRouter()
 
       const pokemons = await Promise.all(promises1);
       const species = await Promise.all(promises2);
-      console.log({ species });
 
       const results = pokemons.map((pokemon, idx) => ({
         name: pokemon.name,
