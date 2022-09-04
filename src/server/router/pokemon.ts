@@ -3,10 +3,31 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { getRandomPokemon } from "../../utils/getRandomPokemon";
 
-const randomPokemonSchema = z.object({
+const PokemonSchema = z.object({
   id: z.number(),
   name: z.string(),
-  types: z.string().array(),
+  types: z
+    .enum([
+      "normal",
+      "fire",
+      "water",
+      "electric",
+      "grass",
+      "ice",
+      "fighting",
+      "poison",
+      "ground",
+      "flying",
+      "psychic",
+      "bug",
+      "rock",
+      "ghost",
+      "dragon",
+      "dark",
+      "steel",
+      "fairy",
+    ])
+    .array(),
   sprite: z.string(),
   stats: z
     .object({
@@ -14,9 +35,11 @@ const randomPokemonSchema = z.object({
       value: z.number(),
     })
     .array(),
+  abilities: z.string().array().nullish(),
+  genus: z.string().nullish(),
 });
 
-export type RandomPokemon = z.infer<typeof randomPokemonSchema>;
+export type Pokemon = z.infer<typeof PokemonSchema>;
 
 export const pokemonRouter = createRouter()
   .query("get-one", {
@@ -25,7 +48,7 @@ export const pokemonRouter = createRouter()
         id: z.number().min(1).max(898),
       })
       .nullish(),
-    output: randomPokemonSchema,
+    output: PokemonSchema,
     async resolve({ input }) {
       const id = input ? input.id : getRandomPokemon();
 
@@ -40,7 +63,7 @@ export const pokemonRouter = createRouter()
 
       const { name, types, stats, sprites } = await res.json();
 
-      const pokemon = {
+      const pokemon: Pokemon = {
         id,
         name,
         types: types.map((type: { type: { name: string } }) => type.type.name),
@@ -61,6 +84,10 @@ export const pokemonRouter = createRouter()
       limit: z.number().min(10).max(100).nullish(),
       cursor: z.number().nullish(),
     }),
+    output: z.object({
+      results: PokemonSchema.array(),
+      nextOffset: z.number(),
+    }),
     async resolve({ input }) {
       const limit = input.limit ?? 10;
       const cursor = input.cursor ?? 1;
@@ -79,9 +106,9 @@ export const pokemonRouter = createRouter()
       const pokemons = await Promise.all(promises1);
       const species = await Promise.all(promises2);
 
-      const results = pokemons.map((pokemon, idx) => ({
-        name: pokemon.name,
+      const results: Pokemon[] = pokemons.map((pokemon, idx) => ({
         id: pokemon.id,
+        name: pokemon.name,
         types: pokemon.types.map(
           (type: { type: { name: string } }) => type.type.name
         ),
@@ -92,6 +119,12 @@ export const pokemonRouter = createRouter()
         genus: species[idx].genera.find(
           (gen: { language: { name: string } }) => gen.language.name === "en"
         ).genus,
+        stats: pokemon.stats.map(
+          (stat: { stat: { name: string }; base_stat: number }) => ({
+            name: stat.stat.name,
+            value: stat.base_stat,
+          })
+        ),
       }));
 
       return {
