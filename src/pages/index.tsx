@@ -32,7 +32,7 @@ const Home: NextPage = () => {
 
       <Header />
 
-      <main className="mx-auto flex flex-col items-center justify-center min-h-screen p-4">
+      <main className="max-w-8xl mx-auto flex flex-col items-center justify-center min-h-screen p-4">
         {/* <div className="grid grid-cols-2 gap-20 max-w-xl w-full"> */}
         <div className="w-full">
           <ul className="space-y-4 w-fit">

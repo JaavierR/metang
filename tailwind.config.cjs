@@ -8,7 +8,11 @@ module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class",
   theme: {
-    extend: {},
+    extend: {
+      maxWidth: {
+        "8xl": "90rem",
+      },
+    },
   },
   plugins: [
     plugin(function ({ matchUtilities, theme }) {
