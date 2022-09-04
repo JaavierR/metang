@@ -29,9 +29,9 @@ export function Header() {
     >
       <div className="relative flex flex-grow basis-0 items-center">
         <Link href="/">
-          <a className="block w-10 overflow-hidden lg:w-auto">
+          <a className="block overflow-hidden lg:w-auto">
             <span className="sr-only">Home page</span>
-            <h1 className="text-2xl leading-normal tracking-tight font-extrabold text-stone-700 dark:text-white">
+            <h1 className="md:text-2xl leading-normal tracking-tight font-extrabold text-stone-700 dark:text-white">
               Random <span className="text-rose-300">Pokemon</span> App
             </h1>
           </a>
