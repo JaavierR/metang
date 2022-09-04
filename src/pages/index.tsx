@@ -4,6 +4,7 @@ import { Fragment, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { trpc } from "../utils/trpc";
 import { Header } from "../components/Header";
+import { PokemonListItem } from "../components/Pokemon";
 
 const Home: NextPage = () => {
   const { ref, inView } = useInView();
@@ -31,24 +32,24 @@ const Home: NextPage = () => {
 
       <Header />
 
-      <main className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
-        <div className="grid grid-cols-2 gap-20 max-w-xl w-full">
-          <div>
-            <div className="mt-10">
-              {pokemons?.pages.map((page, index) => {
-                return (
-                  <Fragment key={index}>
-                    {page.results.map(
-                      (pokemon: { name: string; sprite: string }) => (
-                        <div>{pokemon.name}</div>
-                      )
-                    )}
-                  </Fragment>
-                );
-              })}
-            </div>
-            <div ref={ref}></div>
-          </div>
+      <main className="mx-auto flex flex-col items-center justify-center min-h-screen p-4">
+        {/* <div className="grid grid-cols-2 gap-20 max-w-xl w-full"> */}
+        <div className="w-full">
+          <ul className="space-y-4 w-fit">
+            {pokemons?.pages.map((page, index) => {
+              return (
+                <Fragment key={index}>
+                  {page.results.map(
+                    (pokemon: { name: string; sprite: string }) => (
+                      <PokemonListItem key={pokemon.id} pokemon={pokemon} />
+                    )
+                  )}
+                </Fragment>
+              );
+            })}
+          </ul>
+          <div ref={ref}></div>
+          {/* </div> */}
         </div>
       </main>
     </>
