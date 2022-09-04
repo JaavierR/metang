@@ -4,7 +4,7 @@ import { Fragment, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { trpc } from "../utils/trpc";
 import { Header } from "../components/Header";
-import { PokemonListItem } from "../components/Pokemon";
+import { PokemonCard } from "../components/PokemonCard";
 
 const Home: NextPage = () => {
   const { ref, inView } = useInView();
@@ -32,22 +32,24 @@ const Home: NextPage = () => {
 
       <Header />
 
-      <main className="max-w-8xl mx-auto flex flex-col items-center justify-center min-h-screen p-4">
-        {/* <div className="grid grid-cols-2 gap-20 max-w-xl w-full"> */}
-        <div className="w-full">
-          <ul className="space-y-4 w-fit">
+      <main className="max-w-8xl mx-auto flex flex-col flex-1 items-center min-h-[calc(100vh)-4.5rem] pt-4">
+        <div className="grid md:grid-cols-4 gap-10 w-full">
+          <div className="md:col-span-2 lg:col-span-1 md:sticky md:top-[5.5rem] md:h-[calc(100vh-4.5rem)]">
+            Random pokemon
+          </div>
+
+          <ul className="grid lg:grid-cols-2 gap-6 w-fit md:col-span-2 lg:col-span-3 mx-auto">
             {pokemons?.pages.map((page, index) => {
               return (
                 <Fragment key={index}>
                   {page.results.map((pokemon) => (
-                    <PokemonListItem key={pokemon.id} pokemon={pokemon} />
+                    <PokemonCard key={pokemon.id} pokemon={pokemon} />
                   ))}
                 </Fragment>
               );
             })}
+            <div ref={ref}></div>
           </ul>
-          <div ref={ref}></div>
-          {/* </div> */}
         </div>
       </main>
     </>
