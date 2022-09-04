@@ -9,6 +9,15 @@ import { PokemonCard } from "../components/PokemonCard";
 const Home: NextPage = () => {
   const { ref, inView } = useInView();
 
+  const {
+    data: pokemon,
+    refetch,
+    isFetching,
+  } = trpc.useQuery(["pokemon.get-one"], {
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+  });
+
   const { data: pokemons, fetchNextPage } = trpc.useInfiniteQuery(
     ["pokemon.get-infinite", {}],
     {
@@ -36,8 +45,16 @@ const Home: NextPage = () => {
 
       <main className="max-w-8xl mx-auto flex flex-col flex-1 items-center min-h-[calc(100vh)-4.5rem] pt-4 px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-4 gap-10 w-full">
-          <div className="md:col-span-2 lg:col-span-1 md:sticky md:top-[5.5rem] md:h-[calc(100vh-4.5rem)]">
-            Random pokemon
+          <div className="md:col-span-2 lg:col-span-1 md:sticky md:top-[5.5rem] md:h-[calc(100vh-4.5rem)] mx-auto text-center">
+            {isFetching && <p>Fetching...</p>}
+            {pokemon && !isFetching && <PokemonCard pokemon={pokemon} />}
+            <button
+              type="button"
+              onClick={() => refetch()}
+              className="bg-pink-500 px-4 py-1.5 rounded text-white hover:bg-pink-400 mt-4 text-xs uppercase font-semibold"
+            >
+              Fetch random
+            </button>
           </div>
 
           <ul className="grid lg:grid-cols-2 gap-6 w-fit md:col-span-2 lg:col-span-3 mx-auto">
@@ -45,7 +62,9 @@ const Home: NextPage = () => {
               return (
                 <Fragment key={index}>
                   {page.results.map((pokemon) => (
-                    <PokemonCard key={pokemon.id} pokemon={pokemon} />
+                    <li key={pokemon.id}>
+                      <PokemonCard pokemon={pokemon} />
+                    </li>
                   ))}
                 </Fragment>
               );

@@ -47,89 +47,87 @@ export function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
   });
 
   return (
-    <li>
-      <div
-        className="bg-white shadow shadow-stone-900/10 rounded-md flex flex-col items-center justify-center pb-4 pt-1"
-        ref={parent}
-      >
-        <div>
-          <div className="relative">
-            <div className="absolute w-24 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <img
-                src={pokemon.sprite}
-                alt={`${pokemon.name} stats`}
-                className="max-w-full block"
-              />
-            </div>
-            <span className="font-medium text-[6.25rem] leading-none text-stone-200/50 px-16 [font-feature-settings:'tnum']">
-              {"#"}
-              {`00${pokemon.id}`.slice(-3)}
-            </span>
+    <div
+      className="bg-white shadow shadow-stone-900/10 rounded-md flex flex-col items-center justify-center pb-4 pt-1"
+      ref={parent}
+    >
+      <div>
+        <div className="relative">
+          <div className="absolute w-24 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <img
+              src={pokemon.sprite}
+              alt={`${pokemon.name} stats`}
+              className="max-w-full block"
+            />
           </div>
-          <div className="text-center space-y-2">
-            <div className="text-center">
-              <h1 className="text-xl capitalize font-medium text-stone-700">
-                {pokemon.name}
-              </h1>
-              <p className="text-sm -mt-0.5">{pokemon.genus}</p>
-            </div>
+          <span className="font-medium text-[6.25rem] leading-none text-stone-200/50 px-16 [font-feature-settings:'tnum']">
+            {"#"}
+            {`00${pokemon.id}`.slice(-3)}
+          </span>
+        </div>
+        <div className="text-center space-y-2">
+          <div className="text-center">
+            <h1 className="text-xl capitalize font-medium text-stone-700">
+              {pokemon.name}
+            </h1>
+            <p className="text-sm -mt-0.5">{pokemon.genus}</p>
+          </div>
 
-            <div className="uppercase text-sm space-x-2 font-bold">
-              {pokemon.types.map((type) => (
-                <span key={type} className={colours[type]}>
-                  {type}
-                </span>
-              ))}
-            </div>
+          <div className="uppercase text-sm space-x-2 font-bold">
+            {pokemon.types.map((type) => (
+              <span key={type} className={colours[type]}>
+                {type}
+              </span>
+            ))}
+          </div>
 
-            <div className="space-x-2 text-sm font-medium text-stone-700">
-              {pokemon.abilities?.map((ability) => (
-                <span key={ability} className="capitalize inline-block">
-                  {ability}
-                </span>
-              ))}
-            </div>
+          <div className="space-x-2 text-sm font-medium text-stone-700">
+            {pokemon.abilities?.map((ability) => (
+              <span key={ability} className="capitalize inline-block">
+                {ability}
+              </span>
+            ))}
           </div>
         </div>
-
-        {isOpen && (
-          <ul className="w-72 space-y-1 text-sm mt-4">
-            {pokemon.stats.map((stat) => (
-              <li
-                key={stat.name}
-                className="grid grid-cols-[repeat(16,minmax(0,1fr))] gap-4 items-center"
-              >
-                <p className="font-semibold col-span-7 text-right capitalize text-stone-600">
-                  {stat.name}
-                </p>
-                <p className="col-span-2">{stat.value}</p>
-                <div className="col-span-7 w-full h-1.5 rounded-full bg-stone-200">
-                  <div
-                    className={clsx([
-                      "h-1.5 rounded-full",
-                      { "bg-red-400": stat.value < 50 },
-                      { "bg-orange-400": stat.value >= 50 && stat.value < 100 },
-                      {
-                        "bg-yellow-400": stat.value >= 100 && stat.value < 150,
-                      },
-                      { "bg-green-400": stat.value >= 150 },
-                    ])}
-                    style={{ width: `${(stat.value / 255) * 100}%` }}
-                  ></div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <button
-          className="mt-4 uppercase font-semibold text-xs text-stone-500 flex items-center hover:text-stone-900"
-          type="button"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <span>Stats</span> {isOpen ? <ChevronUp /> : <ChevronDown />}
-        </button>
       </div>
-    </li>
+
+      {isOpen && (
+        <ul className="w-72 space-y-1 text-sm mt-4">
+          {pokemon.stats.map((stat) => (
+            <li
+              key={stat.name}
+              className="grid grid-cols-[repeat(16,minmax(0,1fr))] gap-4 items-center"
+            >
+              <p className="font-semibold col-span-7 text-right capitalize text-stone-600">
+                {stat.name}
+              </p>
+              <p className="col-span-2">{stat.value}</p>
+              <div className="col-span-7 w-full h-1.5 rounded-full bg-stone-200">
+                <div
+                  className={clsx([
+                    "h-1.5 rounded-full",
+                    { "bg-red-400": stat.value < 50 },
+                    { "bg-orange-400": stat.value >= 50 && stat.value < 100 },
+                    {
+                      "bg-yellow-400": stat.value >= 100 && stat.value < 150,
+                    },
+                    { "bg-green-400": stat.value >= 150 },
+                  ])}
+                  style={{ width: `${(stat.value / 255) * 100}%` }}
+                ></div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <button
+        className="mt-4 uppercase font-semibold text-xs text-stone-500 flex items-center hover:text-stone-900"
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span>Stats</span> {isOpen ? <ChevronUp /> : <ChevronDown />}
+      </button>
+    </div>
   );
 }
