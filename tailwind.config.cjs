@@ -1,3 +1,4 @@
+const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
 const {
   default: flattenColorPalette,
@@ -9,13 +10,16 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+      },
       maxWidth: {
         "8xl": "90rem",
       },
     },
   },
   plugins: [
-    plugin(function ({ matchUtilities, theme }) {
+    plugin(function ({ matchUtilities, theme, addUtilities }) {
       matchUtilities(
         {
           highlight: (value) => ({
@@ -27,6 +31,11 @@ module.exports = {
           type: "color",
         }
       );
+      addUtilities({
+        ".rotate-y-180": {
+          transform: "rotateY(180deg)",
+        },
+      });
     }),
   ],
 };
