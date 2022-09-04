@@ -65,25 +65,38 @@ export const pokemonRouter = createRouter()
       const limit = input.limit ?? 10;
       const cursor = input.cursor ?? 1;
 
-      const promises = [];
+      const promises1 = [];
+      const promises2 = [];
 
       for (let index = cursor; index <= cursor + limit; index++) {
-        const url = `https://pokeapi.co/api/v2/pokemon/${index}`;
-        promises.push(fetch(url).then((res) => res.json()));
+        const pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${index}`;
+        const speciesUrl = `https://pokeapi.co/api/v2/pokemon-species/${index}`;
+
+        promises1.push(fetch(pokemonUrl).then((res) => res.json()));
+        promises2.push(fetch(speciesUrl).then((res) => res.json()));
       }
 
-      const results = await Promise.all(promises);
-      const pokemons = results.map((pokemon) => ({
+      const pokemons = await Promise.all(promises1);
+      const species = await Promise.all(promises2);
+      console.log({ species });
+
+      const results = pokemons.map((pokemon, idx) => ({
         name: pokemon.name,
         id: pokemon.id,
         types: pokemon.types.map(
           (type: { type: { name: string } }) => type.type.name
         ),
+        abilities: pokemon.abilities.map(
+          (ability: { ability: { name: string } }) => ability.ability.name
+        ),
         sprite: pokemon.sprites["front_default"],
+        genus: species[idx].genera.find(
+          (gen: { language: { name: string } }) => gen.language.name === "en"
+        ).genus,
       }));
 
       return {
-        results: pokemons,
+        results,
         nextOffset: cursor + limit,
       };
     },
