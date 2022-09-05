@@ -9,23 +9,24 @@ import { PokemonCard } from "../components/PokemonCard";
 const Home: NextPage = () => {
   const { ref, inView } = useInView();
 
-  const {
-    data: pokemon,
-    refetch,
-    isFetching,
-  } = trpc.useQuery(["pokemon.get-one"], {
-    refetchInterval: false,
-    refetchOnWindowFocus: false,
-  });
+  // const {
+  //   data: pokemon,
+  //   refetch,
+  //   isFetching,
+  // } = trpc.useQuery(["pokemon.get-one"], {
+  //   refetchInterval: false,
+  //   refetchOnWindowFocus: false,
+  // });
 
-  const { data: pokemons, fetchNextPage } = trpc.useInfiniteQuery(
-    ["pokemon.get-infinite", {}],
-    {
-      getNextPageParam: (lastPage) => lastPage.nextOffset,
-      refetchOnWindowFocus: false,
-      refetchInterval: false,
-    }
-  );
+  const {
+    data: pokemons,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = trpc.useInfiniteQuery(["pokemon.get-infinite", {}], {
+    getNextPageParam: (lastPage) => lastPage.nextOffset,
+    refetchOnWindowFocus: false,
+    refetchInterval: false,
+  });
 
   useEffect(() => {
     if (inView) {
@@ -55,7 +56,6 @@ const Home: NextPage = () => {
               Fetch random
             </button>
           </div> */}
-
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 w-fit md:col-span-2 lg:col-span-3 mx-auto">
           {pokemons?.pages.map((page, index) => {
             return (
@@ -70,6 +70,11 @@ const Home: NextPage = () => {
           })}
         </ul>
         <div ref={ref}></div>
+        {isFetchingNextPage && (
+          <p className="text-lg py-4 animate-pulse text-stone-600 uppercase font-semibold tracking-tight">
+            Fetching...
+          </p>
+        )}
       </main>
     </>
   );
