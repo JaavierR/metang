@@ -44,8 +44,7 @@ const Home: NextPage = () => {
       <Header />
 
       <main className="max-w-8xl mx-auto flex flex-col flex-1 items-center min-h-[calc(100vh)-4.5rem] pt-4 px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-10 w-full">
-          <div className="md:col-span-2 lg:col-span-1 md:sticky md:top-[5.5rem] md:h-[calc(100vh-4.5rem)] mx-auto text-center">
+        {/* <div className="md:col-span-2 lg:col-span-1 md:sticky md:top-[5.5rem] md:h-[calc(100vh-4.5rem)] mx-auto text-center">
             {isFetching && <p>Fetching...</p>}
             {pokemon && !isFetching && <PokemonCard pokemon={pokemon} />}
             <button
@@ -55,23 +54,22 @@ const Home: NextPage = () => {
             >
               Fetch random
             </button>
-          </div>
+          </div> */}
 
-          <ul className="grid lg:grid-cols-2 gap-6 w-fit md:col-span-2 lg:col-span-3 mx-auto">
-            {pokemons?.pages.map((page, index) => {
-              return (
-                <Fragment key={index}>
-                  {page.results.map((pokemon) => (
-                    <li key={pokemon.id}>
-                      <PokemonCard pokemon={pokemon} />
-                    </li>
-                  ))}
-                </Fragment>
-              );
-            })}
-            <div ref={ref}></div>
-          </ul>
-        </div>
+        <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 w-fit md:col-span-2 lg:col-span-3 mx-auto">
+          {pokemons?.pages.map((page, index) => {
+            return (
+              <Fragment key={index}>
+                {page.results.map((pokemon) => (
+                  <li key={pokemon.id}>
+                    <PokemonCard pokemon={pokemon} />
+                  </li>
+                ))}
+              </Fragment>
+            );
+          })}
+        </ul>
+        <div ref={ref}></div>
       </main>
     </>
   );
