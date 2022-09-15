@@ -48,7 +48,7 @@ export function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
 
   return (
     <div
-      className="bg-white shadow shadow-stone-900/10 rounded-md flex flex-col items-center justify-center pb-4 pt-1"
+      className="bg-white shadow shadow-stone-900/10 rounded-md flex flex-col items-center justify-center pb-4 pt-1 px-16"
       ref={parent}
     >
       <div>
@@ -57,10 +57,10 @@ export function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
             <img
               src={pokemon.sprite}
               alt={`${pokemon.name} stats`}
-              className="max-w-full block"
+              className="max-w-full block [image-rendering:pixelated]"
             />
           </div>
-          <span className="font-medium text-[6.25rem] leading-none text-stone-200/50 px-16 [font-feature-settings:'tnum']">
+          <span className="font-medium text-[6.25rem] leading-none text-stone-200/50 [font-feature-settings:'tnum']">
             {"#"}
             {`00${pokemon.id}`.slice(-3)}
           </span>
